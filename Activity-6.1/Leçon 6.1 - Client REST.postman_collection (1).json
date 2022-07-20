@@ -7,36 +7,6 @@
 	},
 	"item": [
 		{
-			"name": "https://jsonplaceholder.typicode.com/posts/1",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "https://jsonplaceholder.typicode.com/posts/1",
-					"protocol": "https",
-					"host": [
-						"jsonplaceholder",
-						"typicode",
-						"com"
-					],
-					"path": [
-						"posts",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "https://jsonplaceholder.typicode.com/posts/1/comments",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
@@ -277,6 +247,36 @@
 				"body": {
 					"mode": "raw",
 					"raw": "\r\n  {\r\n\r\n    \"title\": \"test patch method\"\r\n   \r\n  }  \r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://jsonplaceholder.typicode.com/posts/1",
+					"protocol": "https",
+					"host": [
+						"jsonplaceholder",
+						"typicode",
+						"com"
+					],
+					"path": [
+						"posts",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "https://jsonplaceholder.typicode.com/posts/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
