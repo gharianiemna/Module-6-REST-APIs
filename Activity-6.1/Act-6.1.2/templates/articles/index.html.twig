@@ -20,16 +20,40 @@
 	<div class="example-wrapper">
 		<h1>Posts list:</h1>
 		{% for item in articles %}
-			<div class="card" style="width: 100%;">
-				<div class="card-body">
-<h5 class="card-title">{{item.id}}. {{item.title}}</h5>
+			<div class="card border-primary " style="width: 100%;">
 
-					<p class="card-text">{{item.body}}</p>
+				<div class="card-body">
+					<h2 class="card-title">{{item.id}}.
+						{{item.title}}</h2>
+					<h4 class="card-text">{{item.body}}</h4>
+					<hr>
+					<h4>Comments:</h4>
+					<hr>
+
+					{% for commentaire in commentaires %}
+						{% if commentaire.postId == item.id %}
+							<h6>{{commentaire.id}}
+								.
+								{{commentaire.body}}
+								<br></h6>
+							<h6>
+								<strong>name  :
+								</strong>
+								{{commentaire.name}}<br></h6>
+
+							<h6>
+								<strong>mail  :</strong>
+								{{commentaire.email}}<br></h6>
+
+							<hr>
+
+						{% endif %}
+
+					{% endfor %}
+
 				</div>
 			</div>
 		{% endfor %}
 
-		</div>
 	</div>
-
-{% endblock %}
+</div>{% endblock %}
