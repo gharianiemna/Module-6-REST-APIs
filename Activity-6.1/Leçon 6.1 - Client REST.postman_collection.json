@@ -240,7 +240,7 @@
 			"response": []
 		},
 		{
-			"name": "https://jsonplaceholder.typicode.com/posts",
+			"name": "https://jsonplaceholder.typicode.com/posts/1",
 			"request": {
 				"method": "PUT",
 				"header": [],
