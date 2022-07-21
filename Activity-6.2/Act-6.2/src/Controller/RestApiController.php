@@ -8,101 +8,108 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Serializer\Serializer;
 use App\Repository\ArticlesRepository;
 use App\Entity\Articles;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations\Get;
+use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
+use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\FOSRestController;
+use Doctrine\Persistence\ManagerRegistry;
+use  Doctrine\ORM\EntityManagerInterface;
+
+
 
 
 class RestApiController extends AbstractController
 {
+
+    
     /**
-     * @Route("/articles", name="liste", methods={"GET"})
+     * @Get("/articles", name="liste")
      */
-public function liste(ArticlesRepository $articlesRepo)
-{
-    $articles = $articlesRepo->apiFindAll();
-    $encoder = [new JsonEncoder()];
-    $normalizer = [new ObjectNormalizer()];
-    $serializer = new Serializer($normalizer, $encoder);
-    $jsonContent = $serializer->serialize($articles, 'json', []);
+    public function liste(ArticlesRepository $articlesRepo)
+    {
+        $articles = $articlesRepo->findAll();
+        $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
+        $data = $serializer->serialize($articles, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 
-    $response = new Response($jsonContent);
-    $response->headers->set('Content-Type', 'application/json');
-    return $response;
-}
+    /**
+         * @Get(
+         *     path = "/article/{id}",
+         *     name = "app_article_show",
+         *     requirements = {"id"="\d+"}
+         * )
+         */
+    public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
+    {
+        $article = $articlesRepo->find($id);
+        $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
+        $data = $serializer->serialize($article, 'json');
+        $response = new Response($data);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
 
-/**
- * @Route("/article/{id}", name="article", methods={"GET"})
- */
-public function getArticle(Articles $article)
-{
-    $encoder = [new JsonEncoder()];
-    $normalizer = [new ObjectNormalizer()];
-    $serializer = new Serializer($normalizer, $encoder);
-    $jsonContent = $serializer->serialize($article, 'json', [
-        'circular_reference_handler' => function ($object) {
-            return $object->getId();
-        }
-    ]);
-    $response = new Response($jsonContent);
-    $response->headers->set('Content-Type', 'application/json');
-    return $response;
-}
+    
 
-/**
- * @Route("/article/add", name="ajout", methods={"POST"})
- */
 
-public function addArticle(Request $request)
-{
-    // On vérifie si la requête est une requête Ajax
-    if($request->isXmlHttpRequest()) {
-   
+    /**
+     * @Post("/article/add", name="ajout")
+     */
+
+    public function addArticle(Request $request, ManagerRegistry $doctrine)
+{  
         $article = new Articles();
         $donnees = json_decode($request->getContent());
-        $article->setTitle($donnees->titre);
-        $article->setBody($donnees->contenu);
-        $entityManager = $this->getDoctrine()->getManager();
+        $article->setTitle($donnees->title)
+                ->setBody($donnees->body)
+                ->setAuthor($donnees->author)
+                ->setDate(new \DateTime());
+        $entityManager = $doctrine->getManager();
         $entityManager->persist($article);
         $entityManager->flush();
-
-        return new Response('ok', 201);
-    }
-    return new Response('Failed', 404);
+        return $this->json($article,201,[]);
 }
 
-/**
- * @Route("/article/edit/{id}", name="edit", methods={"PUT"})
- */
-public function editArticle(?Articles $article, Request $request)
-{
-    // On vérifie si la requête est une requête Ajax
-    if($request->isXmlHttpRequest()) {
-        $donnees = json_decode($request->getContent());
-        $code = 200;
-        if(!$article){
-            $article = new Articles();
-            $code = 201;
-        }
-        $article->setTitle($donnees->titre);
-        $article->setBody($donnees->contenu);
+    /**
+     * @Put("/article/edit/{id}", name="edit")
+     */
+    public function editArticle(?Articles $article, Request $request)
+    {
+            $donnees = json_decode($request->getContent());
+            $code = 200;
+            if(!$article){
+                $article = new Articles();
+                $code = 201;
+            }
+            $article->setTitle($donnees->title);
+            $article->setBody($donnees->body);
+            $article->setAuthor($donnees->author);
+            $article->setDate (new \DateTime((string)$donnees->date));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+           return $this->json($article,201,[]);
+    }
+
+    /**
+     * @Delete("/article/delete/{id}", name="supprime")
+     */
+    public function removeArticle(Articles $article)
+    {
         $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($article);
+        $entityManager->remove($article);
         $entityManager->flush();
-        return new Response('ok', $code);
+        return new Response('ok');
     }
-    return new Response('Failed', 404);
-}
-
-/**
- * @Route("/article/delete/{id}", name="supprime", methods={"DELETE"})
- */
-public function removeArticle(Articles $article)
-{
-    $entityManager = $this->getDoctrine()->getManager();
-    $entityManager->remove($article);
-    $entityManager->flush();
-    return new Response('ok');
-}
 }
