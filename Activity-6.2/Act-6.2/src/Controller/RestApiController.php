@@ -41,12 +41,8 @@ class RestApiController extends AbstractController
     }
 
     /**
-         * @Get(
-         *     path = "/article/{id}",
-         *     name = "app_article_show",
-         *     requirements = {"id"="\d+"}
-         * )
-         */
+    * @Get( path = "/article/{id}", name = "app_article_show", requirements = {"id"="\d+"} )
+    */
     public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
     {
         $article = $articlesRepo->find($id);
@@ -57,7 +53,7 @@ class RestApiController extends AbstractController
         return $response;
     }
 /**
- * @GET("/articles/liste/lastThree", name="derniers")
+ * @GET("/article/lastThree", name="derniers")
  */
 public function listeById(ArticlesRepository $articlesRepo)
 {
@@ -70,7 +66,7 @@ public function listeById(ArticlesRepository $articlesRepo)
 
 }
     /**
-     * @Post("/article/add", name="ajout")
+     * @Post("/article", name="ajout")
      */
 
     public function addArticle(Request $request, ManagerRegistry $doctrine)
@@ -88,7 +84,7 @@ public function listeById(ArticlesRepository $articlesRepo)
     }
 
     /**
-     * @Put("/article/edit/{id}", name="edit")
+     * @Put("/article/{id}", name="edit")
      */
     public function editArticle(?Articles $article, Request $request)
     {
@@ -109,13 +105,13 @@ public function listeById(ArticlesRepository $articlesRepo)
     }
 
     /**
-     * @Delete("/article/delete/{id}", name="supprime")
+     * @Delete("/article/{id}", name="supprime")
      */
     public function removeArticle(Articles $article)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($article);
         $entityManager->flush();
-        return new Response('ok');
+        return new Response('Success');
     }
 }

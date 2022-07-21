@@ -26,10 +26,16 @@ php bin/console server:run
 
 9-Follow the routes:
 find all articles:
-- GET METHOD: "http://127.0.0.1:8000/articles/list"
-find article by ID
-- GET METHOD: "http://127.0.0.1:8000/articles/read/{id}"
+- GET METHOD: http://127.0.0.1:8000/articles
 
-- POST METHOD: "http://127.0.0.1:8000/article/add"
-- PUT METHOD: "http://127.0.0.1:8000/article/edit/{id}"
-- DELETE METHOD: "http://127.0.0.1:8000/article/delete/{id}"
+find article by ID
+- GET METHOD: http://127.0.0.1:8000/article/{id}
+
+find last 3 articles:
+-GET METHOD: http:127.0.0.1:8000/article/lastThree
+
+- POST METHOD: http://127.0.0.1:8000/article
+
+- PUT METHOD: http://127.0.0.1:8000/article/{id}
+
+- DELETE METHOD: http://127.0.0.1:8000/article/{id}
