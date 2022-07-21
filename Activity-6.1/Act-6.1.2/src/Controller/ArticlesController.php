@@ -15,8 +15,8 @@ class ArticlesController extends AbstractController
      */
     public function GetPosts(): Response
     {
-        $client = new Client(['base_uri' => 'https://jsonplaceholder.typicode.com/']);
-        $response = $client->request('GET', '/posts');
+        $client = new Client(['base_uri' => 'http://127.0.0.1:8000/']);
+        $response = $client->request('GET', '/articles');
         $body = $response->getBody();
         $articles = json_decode($body);
 

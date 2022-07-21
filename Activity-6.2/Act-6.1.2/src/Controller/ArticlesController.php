@@ -9,21 +9,22 @@ use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Client;
 
 class ArticlesController extends AbstractController
-
 {
     /**
      * @Route("/get", name="GET")
      */
     public function GetPosts(): Response
     {
-        $client = new Client(['base_uri' => 'http://127.0.0.1:8000/']);
+       $client = new Client(['base_uri' => 'http://127.0.0.1:8000/']);
         $response = $client->request('GET', '/articles');
         $body = $response->getBody();
         $articles = json_decode($body);
-        return $this->render('articles/index.html.twig', [
+
+
+            return $this->render('articles/index.html.twig', [
                 'controller_name' => 'ArticlesController',
                     'articles' => $articles,
-            
+                  
             ]);
     }
 
@@ -32,7 +33,7 @@ class ArticlesController extends AbstractController
      */
     public function postPost(): Response
     {   $client = new Client();
-        $response = $client->request('POST', 'http://127.0.0.1:8000/article', [
+        $response = $client->request('POST', 'https://jsonplaceholder.typicode.com/posts', [
             'form_params' => [
                 'userId' => '1',
                 'id' => '200',
@@ -57,7 +58,7 @@ class ArticlesController extends AbstractController
     public function putPost()
     {
         $client = new Client();
-        $response=$client->put('http://127.0.0.1:8000/article/{id}', [
+        $response=$client->put('https://jsonplaceholder.typicode.com/posts/1', [
             'form_params' => [
                     'userId' => '1',
                 'id' => '300',
@@ -83,25 +84,16 @@ class ArticlesController extends AbstractController
     public function deletePost()
     {
         $client = new Client();
-        $response =$client->delete('http://127.0.0.1:8000/article/{id}');
+        $response =$client->delete('https://jsonplaceholder.typicode.com/posts/1');
         $code=$response->getStatusCode() ;
         $reason = $response->getReasonPhrase(); // OK
-           $client = new Client(['base_uri' => 'http://127.0.0.1:8000/']);
-        $response = $client->request('GET', '/articles');
-        $body = $response->getBody();
-        $articles = json_decode($body);
-
-        // $response = $client->request('GET', '/comments');
-        // $body = $response->getBody();
-        // $comments = json_decode($body);
-
-            return $this->render('articles/index.html.twig', [
-                'controller_name' => 'ArticlesController',
-                    'articles' => $articles,
-                    // 'commentaires'=>$comments
+            return $this->render('articles/message.html.twig', [
+                    'controller_name' => 'ArticlesController',
+                    'code'=>$code ,
+                    'reason'=>$reason,
+                    'a'=>''
             ]);
     }
 
-}
-
+  }
 
