@@ -39,3 +39,11 @@ find last 3 articles:
 - PUT METHOD: http://127.0.0.1:8000/article/{id}
 
 - DELETE METHOD: http://127.0.0.1:8000/article/{id}
+
+10-Open the file of act 6.1.2
+cd Activity-6.1.2
+
+11-Install dependencies 
+composer install
+ 12-Run the server
+php bin/console server:run

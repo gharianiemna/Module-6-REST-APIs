@@ -12,7 +12,7 @@ class ArticlesController extends AbstractController
 
 {
     /**
-     * @Route("/", name="GET")
+     * @Route("/get", name="GET")
      */
     public function GetPosts(): Response
     {
