@@ -58,6 +58,20 @@ public function apiFindAll() : array
 
     return $query->execute();
 }
+
+/**
+* @return Article[] Returns an array of Article objects
+*/
+
+    public function findBylast()
+    {
+        return $this->createQueryBuilder('a')
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(3)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Articles[] Returns an array of Articles objects
     //  */

@@ -25,11 +25,8 @@ use  Doctrine\ORM\EntityManagerInterface;
 
 
 
-
 class RestApiController extends AbstractController
 {
-
-    
     /**
      * @Get("/articles", name="liste")
      */
@@ -59,27 +56,36 @@ class RestApiController extends AbstractController
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
+/**
+ * @GET("/articles/liste/lastThree", name="derniers")
+ */
+public function listeById(ArticlesRepository $articlesRepo)
+{
+    $articles = $articlesRepo->findBylast();
+    $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
+    $data = $serializer->serialize($articles, 'json');
+    $response = new Response($data);
+    $response->headers->set('Content-Type', 'application/json');
+    return $response;
 
-    
-
-
+}
     /**
      * @Post("/article/add", name="ajout")
      */
 
     public function addArticle(Request $request, ManagerRegistry $doctrine)
-{  
-        $article = new Articles();
-        $donnees = json_decode($request->getContent());
-        $article->setTitle($donnees->title)
-                ->setBody($donnees->body)
-                ->setAuthor($donnees->author)
-                ->setDate(new \DateTime());
-        $entityManager = $doctrine->getManager();
-        $entityManager->persist($article);
-        $entityManager->flush();
-        return $this->json($article,201,[]);
-}
+    {  
+            $article = new Articles();
+            $donnees = json_decode($request->getContent());
+            $article->setTitle($donnees->title)
+                    ->setBody($donnees->body)
+                    ->setAuthor($donnees->author)
+                    ->setDate(new \DateTime());
+            $entityManager = $doctrine->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+            return $this->json($article,201,[]);
+    }
 
     /**
      * @Put("/article/edit/{id}", name="edit")
