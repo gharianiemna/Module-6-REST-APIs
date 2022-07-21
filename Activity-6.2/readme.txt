@@ -45,5 +45,6 @@ cd Activity-6.1.2
 
 11-Install dependencies 
 composer install
+
  12-Run the server
 php bin/console server:run
