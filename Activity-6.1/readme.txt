@@ -34,4 +34,4 @@ php bin/console server:run
 - GET METHOD: "/get"
 - POST METHOD: "/post"
 - PUT METHOD: "/put"
-- DELETE METHOD: "/delete"
+- DELETE METHOD: "/delete" 

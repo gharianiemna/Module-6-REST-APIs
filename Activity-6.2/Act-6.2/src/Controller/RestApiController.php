@@ -80,7 +80,7 @@ public function listeById(ArticlesRepository $articlesRepo)
             $entityManager = $doctrine->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
-            return $this->json($article,201,[]);
+            return $this->json($article,200,[]);
     }
 
     /**
@@ -101,7 +101,7 @@ public function listeById(ArticlesRepository $articlesRepo)
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
-           return $this->json($article,201,[]);
+           return $this->json($article,$code,[]);
     }
 
     /**

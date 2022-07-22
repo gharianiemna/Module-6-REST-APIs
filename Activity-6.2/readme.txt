@@ -48,3 +48,11 @@ composer install
 
  12-Run the server
 php bin/console server:run
+
+9-Follow the routes:
+
+Follow the routes:
+- view articles: "/get"
+- add article: "/post"
+- update article: "/put"
+- delete article: "/delete" or click on delete button under the article.

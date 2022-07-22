@@ -21,35 +21,11 @@
 		<h1>Posts list:</h1>
 		{% for item in articles %}
 			<div class="card border-primary " style="width: 100%;">
-
 				<div class="card-body">
 					<h2 class="card-title">{{item.id}}.
 						{{item.title}}</h2>
 					<h4 class="card-text">{{item.body}}</h4>
-					{# <hr>
-					<h4>Comments:</h4>
-					<hr> #}
-
-					{# {% for commentaire in commentaires %}
-						{% if commentaire.postId == item.id %}
-							<h6>{{commentaire.id}}
-								.
-								{{commentaire.body}}
-								<br></h6>
-							<h6>
-								<strong>name  :
-								</strong>
-								{{commentaire.name}}<br></h6>
-
-							<h6>
-								<strong>mail  :</strong>
-								{{commentaire.email}}<br></h6>
-
-							<hr>
-
-						{% endif %}
-
-					{% endfor %} #}
+					<a href="{{path('DELETE')}}" class="btn btn-primary">Supprimer</a>
 
 				</div>
 			</div>

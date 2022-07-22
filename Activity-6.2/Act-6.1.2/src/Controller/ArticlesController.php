@@ -33,12 +33,12 @@ class ArticlesController extends AbstractController
      */
     public function postPost(): Response
     {   $client = new Client();
-        $response = $client->request('POST', 'https://jsonplaceholder.typicode.com/posts', [
-            'form_params' => [
-                'userId' => '1',
-                'id' => '200',
+        $response = $client->request('POST', 'http://127.0.0.1:8000/article', [
+             'json' => [
+                'author' => 'habib',
                 'title' => 'Test title',
                 'body' => 'test body',
+                'date' => '20/20/2020'
                 ]
         ]);
         $a=$response->getBody();
@@ -58,12 +58,12 @@ class ArticlesController extends AbstractController
     public function putPost()
     {
         $client = new Client();
-        $response=$client->put('https://jsonplaceholder.typicode.com/posts/1', [
-            'form_params' => [
-                    'userId' => '1',
-                'id' => '300',
-                'title' => 'put test title',
+        $response=$client->request('PUT', 'http://127.0.0.1:8000/article/1', [
+             'json' => [
+                'author' => 'habib',
+                'title' => 'Test title',
                 'body' => 'test body',
+                'date' => '2022-07-21 10:18:15'
             ],
             'timeout' => 5
         ]);
@@ -84,15 +84,11 @@ class ArticlesController extends AbstractController
     public function deletePost()
     {
         $client = new Client();
-        $response =$client->delete('https://jsonplaceholder.typicode.com/posts/1');
-        $code=$response->getStatusCode() ;
-        $reason = $response->getReasonPhrase(); // OK
-            return $this->render('articles/message.html.twig', [
-                    'controller_name' => 'ArticlesController',
-                    'code'=>$code ,
-                    'reason'=>$reason,
-                    'a'=>''
-            ]);
+    if (isset($_GET['id'])) {
+     $this->client->request('DELETE','http://127.0.0.1:8000/article/'.$_GET['id']);
+     }return $this->json(["message" => "article supprime"],200);
+     
+        
     }
 
   }
