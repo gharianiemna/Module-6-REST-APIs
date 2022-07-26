@@ -45,7 +45,7 @@ class RestApiController extends AbstractController
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $articles = $articlesRepo->findAll();
         $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer($classMetadataFactory)), array('json' => new JsonEncoder()));
-        $data = $serializer->serialize($articles, 'json',['groups' => 'art']);
+        $data = $serializer->serialize($articles, 'json',['groups' => 'articles']);
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -59,10 +59,10 @@ class RestApiController extends AbstractController
         $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $article = $articlesRepo->find($id);
        if(!$article){
-            return $this->json(["error message" => "article not found"],200);
+            return $this->json(["error message" => "this article is not found"],404);
         }
-           $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer($classMetadataFactory)), array('json' => new JsonEncoder()));
-        $data = $serializer->serialize($article, 'json',['groups' => 'art']);
+        $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer($classMetadataFactory)), array('json' => new JsonEncoder()));
+        $data = $serializer->serialize($article, 'json',['groups' => 'articlesById']);
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -106,8 +106,8 @@ public function listeById(ArticlesRepository $articlesRepo)
             $donnees = json_decode($request->getContent());
             $code = 200;
             if(!$article){
-                $article = new Articles();
-                $code = 201;
+             
+                $code = 404;
             }
             $article->setTitle($donnees->title);
             $article->setBody($donnees->body);

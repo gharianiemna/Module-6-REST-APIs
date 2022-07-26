@@ -19,13 +19,13 @@ class Articles
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"art"})
+     *  @Groups({"articles", "articlesById"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"art"})
+     * @Groups({"articles" })
      */
     private $body;
 
@@ -36,6 +36,7 @@ class Articles
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"articlesById"})
      */
     private $author;
 
