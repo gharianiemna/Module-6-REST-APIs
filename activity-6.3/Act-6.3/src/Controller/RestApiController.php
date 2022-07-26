@@ -43,8 +43,8 @@ class RestApiController extends AbstractController
     }
 
     /**
-    * @Get( path = "/article/{id}", name = "app_article_show", requirements = {"id"="\d+"} )
-    * @IsGranted("ROLE_USER")
+    * @Get( path = "api/article/{id}", name = "app_article_show", requirements = {"id"="\d+"} )
+
     */
     public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
     {
@@ -60,7 +60,6 @@ class RestApiController extends AbstractController
     }
 /**
  * @GET("/article/lastThree", name="derniers")
- * @IsGranted("ROLE_USER")
  */
 public function listeById(ArticlesRepository $articlesRepo)
 {
@@ -74,7 +73,6 @@ public function listeById(ArticlesRepository $articlesRepo)
 }
     /**
      * @Post("/api/article", name="ajout")
-     * @IsGranted("ROLE_ADMIN")
      */
 
     public function addArticle(Request $request, ManagerRegistry $doctrine)
@@ -93,7 +91,6 @@ public function listeById(ArticlesRepository $articlesRepo)
 
     /**
      * @Put("/api/article/{id}", name="edit")
-     *  @IsGranted("ROLE_ADMIN")
      */
     public function editArticle(?Articles $article, Request $request)
     {
@@ -115,7 +112,6 @@ public function listeById(ArticlesRepository $articlesRepo)
 
     /**
      * @Delete("/api/article/{id}", name="supprime")
-     *  @IsGranted("ROLE_ADMIN")
      */
     public function removeArticle(Articles $article)
     {
