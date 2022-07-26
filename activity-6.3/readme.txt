@@ -16,7 +16,7 @@ php bin/console doctrine:database:create
 5-Run migrations
 php bin/console doctrine:migrations:migrate
 
-6-Run upload fixtures into database
+6-Upload fixtures into database
  php bin/console doctrine:fixtures:load
 
 7-Installing JWT management bundle:
@@ -59,7 +59,7 @@ In the body add the data:
     "body": "test",
     "author": "talan",
     "date": 26/07/2022
-  },
+  }
 
 
 - POST METHOD: api/article

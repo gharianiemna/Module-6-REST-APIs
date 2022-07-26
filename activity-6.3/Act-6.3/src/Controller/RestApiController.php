@@ -30,7 +30,7 @@ class RestApiController extends AbstractController
 {
     /**
      * @Get("/articles", name="liste")
-     * @IsGranted("ROLE_USER")
+    
      */
     public function liste(ArticlesRepository $articlesRepo)
     {
@@ -49,6 +49,9 @@ class RestApiController extends AbstractController
     public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
     {
         $article = $articlesRepo->find($id);
+       if(!$article){
+            return $this->json(["error message" => "article not found"],200);
+        }
         $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
         $data = $serializer->serialize($article, 'json');
         $response = new Response($data);
