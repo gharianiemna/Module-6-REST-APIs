@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\ArticlesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -19,11 +19,13 @@ class Articles
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"art"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"art"})
      */
     private $body;
 

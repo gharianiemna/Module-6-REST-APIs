@@ -7,6 +7,15 @@
 <br>
 
 <h1>Welcome to Talan </h1>
+{% if app.user %}
+	<div class="mb-3">
+		You are logged in as
+<p class="text-info">{{ app.user.username }}</p>
+
+
+		
+	</div>
+{% endif %}
 
 
  

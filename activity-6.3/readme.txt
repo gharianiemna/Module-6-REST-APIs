@@ -23,9 +23,9 @@ php bin/console doctrine:migrations:migrate
 composer require lexik/jwt-authentication-bundle
 
 
-8-Generate a public and private key with a passphrase to report in the .env
+8-Generate a public and private key with a passphrase to report in the .env (JWT_PASSPHRASE=TALANacademy)
 mkdir -p config/jwt
-openssl genrsa -out config/jwt/private.pem -aes256 4096
+openssl genrsa -out config/jwt/private.pem -aes256 4096 
 openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 
 9-Run the server
