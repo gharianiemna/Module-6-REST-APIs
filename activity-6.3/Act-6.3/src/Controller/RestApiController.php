@@ -21,6 +21,7 @@ use FOS\RestBundle\Controller\Annotations\Put;
 use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Persistence\ManagerRegistry;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use  Doctrine\ORM\EntityManagerInterface;
 
 
@@ -29,6 +30,7 @@ class RestApiController extends AbstractController
 {
     /**
      * @Get("/articles", name="liste")
+     * @IsGranted("ROLE_USER")
      */
     public function liste(ArticlesRepository $articlesRepo)
     {
@@ -42,6 +44,7 @@ class RestApiController extends AbstractController
 
     /**
     * @Get( path = "/article/{id}", name = "app_article_show", requirements = {"id"="\d+"} )
+    * @IsGranted("ROLE_USER")
     */
     public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
     {
@@ -54,6 +57,7 @@ class RestApiController extends AbstractController
     }
 /**
  * @GET("/article/lastThree", name="derniers")
+ * @IsGranted("ROLE_USER")
  */
 public function listeById(ArticlesRepository $articlesRepo)
 {
@@ -66,7 +70,8 @@ public function listeById(ArticlesRepository $articlesRepo)
 
 }
     /**
-     * @Post("/article", name="ajout")
+     * @Post("/api/article", name="ajout")
+     * @IsGranted("ROLE_ADMIN")
      */
 
     public function addArticle(Request $request, ManagerRegistry $doctrine)
@@ -84,7 +89,8 @@ public function listeById(ArticlesRepository $articlesRepo)
     }
 
     /**
-     * @Put("/article/{id}", name="edit")
+     * @Put("/api/article/{id}", name="edit")
+     *  @IsGranted("ROLE_ADMIN")
      */
     public function editArticle(?Articles $article, Request $request)
     {
@@ -105,7 +111,8 @@ public function listeById(ArticlesRepository $articlesRepo)
     }
 
     /**
-     * @Delete("/article/{id}", name="supprime")
+     * @Delete("/api/article/{id}", name="supprime")
+     *  @IsGranted("ROLE_ADMIN")
      */
     public function removeArticle(Articles $article)
     {

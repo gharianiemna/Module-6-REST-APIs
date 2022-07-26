@@ -26,19 +26,19 @@ php bin/console server:run
 
 9-Follow the routes:
 find all articles:
-- GET METHOD: http://127.0.0.1:8000/articles
+- GET METHOD: /articles
 
 find article by ID
-- GET METHOD: http://127.0.0.1:8000/article/{id}
+- GET METHOD: /article/{id}
 
 find last 3 articles:
--GET METHOD: http:127.0.0.1:8000/article/lastThree
+-GET METHOD: /article/lastThree
 
-- POST METHOD: http://127.0.0.1:8000/article
+- POST METHOD:/article
 
-- PUT METHOD: http://127.0.0.1:8000/article/{id}
+- PUT METHOD: /article/{id}
 
-- DELETE METHOD: http://127.0.0.1:8000/article/{id}
+- DELETE METHOD: /article/{id}
 
 10-Open the file of act 6.1.2
 cd Activity-6.1.2

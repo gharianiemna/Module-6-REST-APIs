@@ -20,7 +20,7 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 use Symfony\Component\Security\Guard\PasswordAuthenticatedInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
-class LoginAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
+class UserAuthAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
     use TargetPathTrait;
 
@@ -50,7 +50,7 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
         $credentials = [
             'email' => $request->request->get('email'),
             'password' => $request->request->get('password'),
-            'csrf_token' => $request->request->get('_csrf_token'),
+            //'csrf_token' => $request->request->get('_csrf_token'),
         ];
         $request->getSession()->set(
             Security::LAST_USERNAME,
@@ -62,10 +62,10 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+       /* $token = new CsrfToken('authenticate', $credentials['csrf_token']);
         if (!$this->csrfTokenManager->isTokenValid($token)) {
             throw new InvalidCsrfTokenException();
-        }
+        }*/
 
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
 
@@ -95,7 +95,7 @@ class LoginAuthenticator extends AbstractFormLoginAuthenticator implements Passw
             return new RedirectResponse($targetPath);
         }
 
-        // For example : return new RedirectResponse($this->urlGenerator->generate('some_route'));
+        return new RedirectResponse($this->urlGenerator->generate('home'));
         throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
     }
 
