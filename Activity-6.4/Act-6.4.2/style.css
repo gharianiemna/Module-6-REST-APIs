@@ -1,0 +1,23 @@
+canvas 
+{
+    border : 1px solid black;
+   flex: 4;
+}
+#dessin {
+    display: flex;
+}
+#palette {
+    flex: 1;
+}
+#outils {
+    flex: 1;
+}
+#palette div, #outils div {
+    width: 100px;
+    height:100px;
+    border : 1px solid black;
+    font-size: 3rem;
+    display : flex;
+    justify-content: center;
+    align-items: center ;
+}
