@@ -62,7 +62,7 @@ In the body add the data:
   }
 
 
-- POST METHOD: api/article
+- POST METHOD: api/article/
 
 - PUT METHOD: api/article/{id}
 

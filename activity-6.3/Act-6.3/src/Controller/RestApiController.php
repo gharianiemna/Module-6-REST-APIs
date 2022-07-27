@@ -106,7 +106,6 @@ public function listeById(ArticlesRepository $articlesRepo)
             $donnees = json_decode($request->getContent());
             $code = 200;
             if(!$article){
-             
                 $code = 404;
             }
             $article->setTitle($donnees->title);
