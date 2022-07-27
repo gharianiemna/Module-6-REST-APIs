@@ -81,7 +81,6 @@ class RestApiController extends AbstractController
     {
         return   $articlesRepo->findBylast();
 
-
     }
 
  /**
