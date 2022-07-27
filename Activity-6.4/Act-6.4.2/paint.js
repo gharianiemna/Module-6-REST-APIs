@@ -12,6 +12,9 @@ class Paint {
         // couleur du trait et epaisseur
         this.ctx.strokeStyle = "black"
         this.ctx.lineWidth = 2 
+        
+        
+        
         //si je clique 
         this.canvas.addEventListener("mousedown",(e) => {
             //je dessine
@@ -20,6 +23,8 @@ class Paint {
             this.prevX = (e.clientX - this.canvas.offsetLeft) * 400 / this.canvas.clientWidth
             this.prevY = (e.clientY - this.canvas.offsetTop) * 400 / this.canvas.clientHeight
         })
+
+          //si je deplace la souris
         this.canvas.addEventListener("mousemove",(e) => {
             if(this.draw){
                 //on calcule les coordoonées 
@@ -33,6 +38,7 @@ class Paint {
             }
         }
         )
+        
         //arreter de dessiner en lachant la souris
         this.canvas.addEventListener("mouseup", () => {
             this.draw = false
