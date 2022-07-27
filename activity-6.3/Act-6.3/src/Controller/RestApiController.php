@@ -16,6 +16,7 @@ use App\Repository\ArticlesRepository;
 use App\Entity\Articles;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\View;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -23,83 +24,84 @@ use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\FOSRestController;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use  Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 
-/**
- * Class RestApiController
- * @package App\Controller
- * /**
- * @Rest\Route("/api/article")
- */
+
+
 
 class RestApiController extends AbstractController
 {
-    /**
-     * @Get("/", name="liste")
+         /**
+     * @Rest\View(serializerGroups={"articles"})
+     * @Rest\Get("/articles")
+     * @param ArticlesRepository $articlesRepo
+     * @return Articles[]
      */
-    public function liste(ArticlesRepository $articlesRepo)
+    public function fetchList(ArticlesRepository $articlesRepo)
     {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $articles = $articlesRepo->findAll();
-        $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer($classMetadataFactory)), array('json' => new JsonEncoder()));
-        $data = $serializer->serialize($articles, 'json',['groups' => 'articles']);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $articlesRepo->findAll();
     }
 
-    /**
-    * @Get( path = "/{id}", name = "app_article_show", requirements = {"id"="\d+"} )
-    */
-    public function getArticle(Articles $article, ArticlesRepository $articlesRepo, $id)
+
+     /**
+     * @Rest\View(serializerGroups={"articles"})
+     * @Rest\Get("/api/articles")
+     * @param ArticlesRepository $articlesRepo
+     * @return Articles[]
+     */
+    public function secureFetchList(ArticlesRepository $articlesRepo)
     {
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
-        $article = $articlesRepo->find($id);
-       if(!$article){
-            return $this->json(["error message" => "this article is not found"],404);
+        return $articlesRepo->findAll();
+    }
+
+ /**
+     * @Rest\Get("/api/article/{id}")
+    * @Rest\View(serializerGroups={"articlesById"})
+    * @param ArticlesRepository $articlesRepo
+     * @return Articles[]
+     * @return object
+     */
+    public function fetchById(Articles $Article ,ArticlesRepository $articlesRepo)
+    {
+       return  $articlesRepo->find($Article);
+    }
+
+
+  /**
+     * @Rest\Get("/api/article/lastThree")
+     * @Rest\View(serializerGroups={"articles"})
+     * @param ArticlesRepository $articlesRepo
+     * @return Articles[]
+     * @return object
+     */
+    public function LastThree(ArticlesRepository $articlesRepo)
+    {
+        return   $articlesRepo->findBylast();
+
+
+    }
+
+ /**
+     * @Rest\View(statusCode = 201, serializerGroups={"articles"})
+     * @Rest\Post("/api/article", name="PostArticle")
+     */
+    public function addAricle(EntityManagerInterface $em,Request $request,SerializerInterface $serializer)
+    {
+        try {
+            $article = $serializer->deserialize($request->getContent(),Articles::class,'json');
+            $em->persist($article);
+            $em->flush();
+            return $article;
+        } catch (NotEncodableValueException $e) {
+            return $this->json(["error message"=>$e->getMessage()],400);
         }
-        $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer($classMetadataFactory)), array('json' => new JsonEncoder()));
-        $data = $serializer->serialize($article, 'json',['groups' => 'articlesById']);
-        $response = new Response($data);
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
-    }
-/**
- * @GET("/lastThree", name="derniers")
- */
-public function listeById(ArticlesRepository $articlesRepo)
-{
-    $articles = $articlesRepo->findBylast();
-    $serializer = new Serializer(array(new DateTimeNormalizer('d.m.Y'), new GetSetMethodNormalizer()), array('json' => new JsonEncoder()));
-    $data = $serializer->serialize($articles, 'json');
-    $response = new Response($data);
-    $response->headers->set('Content-Type', 'application/json');
-    return $response;
-
-}
-    /**
-     * @Post("/", name="ajout")
-     */
-
-    public function addArticle(Request $request, ManagerRegistry $doctrine)
-    {  
-            $article = new Articles();
-            $donnees = json_decode($request->getContent());
-            $article->setTitle($donnees->title)
-                    ->setBody($donnees->body)
-                    ->setAuthor($donnees->author)
-                    ->setDate(new \DateTime());
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($article);
-            $entityManager->flush();
-            return $this->json($article,200,[]);
     }
 
     /**
-     * @Put("/{id}", name="edit")
+     * @Put("/api/article/{id}", name="edit")
      */
     public function editArticle(?Articles $article, Request $request)
     {
@@ -119,7 +121,7 @@ public function listeById(ArticlesRepository $articlesRepo)
     }
 
     /**
-     * @Delete("/{id}", name="supprime")
+     * @Delete("/api/article/{id}", name="supprime")
      */
     public function removeArticle(Articles $article)
     {
